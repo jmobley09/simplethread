@@ -2,12 +2,11 @@ from dateutil import parser
 
 # class for manipulating projects with dates
 class Project():
-    def __init__(self, start: str, end: str, city: str) -> None:
+    def __init__(self, start: str, end: str) -> None:
         self.start = start
         self.end = end
-        self.city = city
 
-    def calc_full_days(self) -> int:
+    def calc_total_days(self) -> int:
         # defining values to avoid magic numbers
         to_minutes: int = 60
         to_hours: int = 60
