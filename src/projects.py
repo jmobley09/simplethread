@@ -12,10 +12,14 @@ class Project():
         to_minutes: int = 60
         to_hours: int = 60
         to_days: int = 24
+        date_offset: int = 1
 
         # converting strings into date objects
         start_date: parser = parser.parse(self.start)
         end_date: parser = parser.parse(self.end)
 
-        # return the difference between the dates represented in days
-        return round(((end_date - start_date).total_seconds()) / to_minutes / to_hours / to_days) 
+        # the total between the dates represented in days
+        # adding extra 1 to account for the last day not being included
+        total_days: int = round(((end_date - start_date).total_seconds()) / to_minutes / to_hours / to_days) + date_offset
+
+        return total_days
