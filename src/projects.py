@@ -15,3 +15,27 @@ class Project():
         # converting strings into date objects
         self.start_date: parser = parser.parse(start)
         self.end_date: parser = parser.parse(end)
+
+    # used to calculate the days between two dates and the offset is used to either subtract or add date that might be needed
+    def calc_days(self, date_one: parser, date_two: parser, date_offset: int) -> int:
+        # defining values to avoid magic numbers
+        to_minutes: int = 60
+        to_hours: int = 60
+        to_days: int = 24
+
+        # the total between the dates represented in days
+        # adding extra 1 to account for the last day not being included
+        total_days: int = round(((date_one - date_two).total_seconds()) / to_minutes / to_hours / to_days) + date_offset
+
+        return total_days
+
+    # returns the number of each day in a project
+    def calc_project_totals(self) -> dict:
+        # default dict to return
+        project_days: dict = {
+            "full_days": 0,
+            "travel_days": 2,
+        }
+
+        # add the correct amount of full days to dict
+        project_days["full_days"] = self.calc_days(self.end_date, self.start_date, -1)

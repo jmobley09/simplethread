@@ -1,7 +1,3 @@
-
-from dateutil.parser import parser
-
-
 class Reimbursement():
     def __init__(self, projects: dict) -> None:
         self.projects: dict = projects
@@ -24,19 +20,17 @@ class Reimbursement():
 
         # check for duplicates and return overlap if it exists
         if self.checkIfDuplicates(date_list):
-            return True
+            return (True, )
         else:
             return False
 
-    # used to calculate the days between two dates and the offset is used to either subtract or add date that might be needed
-    def calc_days(self, date_one: parser, date_two: parser, date_offset: int) -> int:
-        # defining values to avoid magic numbers
-        to_minutes: int = 60
-        to_hours: int = 60
-        to_days: int = 24
+    def calc_gap_days(self):
+        gap_day: int = 0
 
-        # the total between the dates represented in days
-        # adding extra 1 to account for the last day not being included
-        total_days: int = round(((date_one - date_two).total_seconds()) / to_minutes / to_hours / to_days) + date_offset
+    # returns the total for entire project set
+    def calc_reimbursement(self) -> int:
+        pass
+        # return (full_days * self.projects[project].full_rate) + (travel_days * self.projects[project].travel_rate) + (gap_days * self.projects[project].travel_rate)
 
-        return total_days
+    # print(new_reimbursement.calc_days(project_set["project_2"].start_date, project_set["project_1"].end_date, -1)) #used for gap
+    # print(new_reimbursement.calc_days(project_set["project_2"].end_date, project_set["project_2"].start_date, -1)) #used for full days
