@@ -1,32 +1,30 @@
 from projects import Project
 from reimbursement import Reimbursement
 
-if __name__ == "__main__":
-    project_set_1: dict = {
-        "project_1": Project("9/1/20", "9/3/20", "Low")
-    } #total = 165
-    project_set_2: dict = {
-        "project_1": Project("9/1/20", "9/1/20", "Low"),
-        "project_2": Project("9/2/20", "9/6/20", "High"),
-        "project_3": Project("9/6/20", "9/8/20", "Low")
-    }
-    project_set_3: dict = {
-        "project_1": Project("9/1/20", "9/3/20", "Low"),
-        "project_2": Project("9/5/20", "9/7/20", "High"),
-        "project_3": Project("9/8/20", "9/8/20", "High")
-    }
-    project_set_4: dict = {
-        "project_1": Project("9/1/20", "9/1/20", "Low"),
-        "project_2": Project("9/1/20", "9/1/20", "High"),
-        "project_3": Project("9/2/20", "9/2/20", "High"),
-        "project_4": Project("9/2/20", "9/3/20", "High")
-    }
+# dictionary to hold all of the projects
+set_dict = {}
 
-    reimbursement_1 = Reimbursement(project_set_1)
-    reimbursement_2 = Reimbursement(project_set_2)
-    reimbursement_3 = Reimbursement(project_set_3)
-    reimbursement_4 = Reimbursement(project_set_4)
-    print(reimbursement_1.calc_reimbursement())
-    print(reimbursement_2.calc_reimbursement())
-    print(reimbursement_3.calc_reimbursement())
-    print(reimbursement_4.calc_reimbursement())
+# gather information
+def collect_project_info() -> None :
+    print("Please input your project information")
+    project_name: str = input("Project Name:")
+    project_start: str = input("Project Start Date:")
+    project_end: str = input("Project End Date:")
+    project_city_type: str = input("Project City Type (High or Low):")
+
+    # put into the set
+    set_dict[project_name] = Project(project_start, project_end, (project_city_type).capitalize())
+    additional_project()
+# checks for additional projects
+def additional_project() -> None:
+    yes_list: list = ['Yes', 'YES', 'yes','Y', 'y']
+    no_list: list = ['NO', 'no', 'No','n', 'N']
+    answer: str = input("Additional Project to add to set?")
+    if answer in yes_list:
+        collect_project_info()
+    elif answer in no_list:
+        new_reimbursement: Reimbursement = Reimbursement(set_dict)
+        print(f"\nTotal Reimbursement for Set: {new_reimbursement.calc_reimbursement()}\n")
+
+if __name__ == "__main__":
+    collect_project_info()
