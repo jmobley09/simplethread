@@ -11,34 +11,26 @@ class Reimbursement():
         self.travel_rate_low: int = 45
 
     # helper function for checking for duplicates
-    # def checkIfDuplicates(self, list_of_elems) -> int:
-    #     # if len(listOfElems) == len(set(listOfElems)):
-    #     #     return False
-    #     # else:
-    #     #     return True
-    #     duplicates: list = []
-    #     unique: set = set(list_of_elems)
-    #     for each in unique:
-    #         count: int = list_of_elems.count(each)
-    #         if count > 1:
-    #             duplicates.append(each)
-    #     return len(duplicates)
+    def checkIfDuplicates(self, list_of_elems) -> int:
+        duplicates: list = []
+        unique: set = set(list_of_elems)
+        for each in unique:
+            count: int = list_of_elems.count(each)
+            if count > 1:
+                duplicates.append(each)
+        return len(duplicates)
 
-    # # determine if there is an overlap based on start dates
-    # # add all the dates to a list and run through helper to check if duplicates
-    # # duplicate starte dates = overlap
-    # def is_overlap(self) -> bool:
-    #     date_list: list = []
-    #     for project in self.projects:
-    #         # converting datetime object to string for easy comparison
-    #         date_list.append(str(self.projects[project].start_date))
+    # determine if there is an overlap based on start dates
+    # add all the dates to a list and run through helper to check if duplicates
+    # duplicate starte dates = overlap
+    def is_overlap(self) -> int:
+        date_list: list = []
+        for project in self.projects:
+            # converting datetime object to string for easy comparison
+            date_list.append(str(self.projects[project].start_date))
 
         # check for duplicates and return overlap if it exists
-        # if self.checkIfDuplicates(date_list):
-        #     return (True)
-        # else:
-        #     return False
-        # return self.checkIfDuplicates(date_list)
+        return self.checkIfDuplicates(date_list)
     def calc_full_days(self) -> None:
         # use method for each project to get days and add to total
         for project in self.projects:
@@ -51,6 +43,7 @@ class Reimbursement():
     def calc_gap(self) -> None:
         # calc days offset
         the_next_day: int = 1
+        same_day_transition: int = 0
 
         # getting only the project objects into a list 
         project_list: list = []
@@ -78,7 +71,7 @@ class Reimbursement():
                    self.travel_days_high += 1
                 elif project_list[i+1].city_type == "Low":
                     self.travel_days_low += 1
-            elif current_gap == the_next_day:
+            elif current_gap == the_next_day or ((current_gap - self.is_overlap()) == same_day_transition):
                 # check if either project has a high cost, if so adds the full day at that default
                 if project_list[i].city_type == "High" or project_list[i+1].city_type == "High":
                    self.full_days_high += 1
