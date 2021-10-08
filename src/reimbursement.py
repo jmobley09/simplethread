@@ -50,16 +50,25 @@ class Reimbursement():
         # uses zero offset since extra day doesnt need to be included
         for i in range(len(project_list)-1):
             current_gap: int = project_list[i].calc_days(project_list[i+1].start_date, project_list[i].end_date, 0)
+            # if there is a gap more than a day each side needs to be added to travel
+            # each needs to be calculated seperately to ensure proper rate
             if current_gap > more_than_next_day:
+                # adding travel day for end of project
                 if project_list[i].city_type == "High":
                    self.travel_days_high += 1
                 elif project_list[i].city_type == "Low":
                     self.travel_days_low += 1
+                # adding travel day for start of next project
+                if project_list[i+1].city_type == "High":
+                   self.travel_days_high += 1
+                elif project_list[i+1].city_type == "Low":
+                    self.travel_days_low += 1
             else:
-                if project_list[i].city_type == "High":
-                   self.full_days_high += 1
-                elif project_list[i].city_type == "Low":
-                    self.full_days_low += 1
+                # check if either project has a high cost, if so adds the full day at that default
+                if project_list[i].city_type == "High" or project_list[i+1].city_type == "High":
+                   self.full_days_high += 2
+                elif project_list[i].city_type == "Low" and project_list[i+1].city_type == "Low":
+                    self.full_days_low += 2
 
     # adds in the first and last day to the appropiate total   
     def calc_travel_days(self) -> None:
