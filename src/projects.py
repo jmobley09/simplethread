@@ -31,5 +31,13 @@ class Project():
 
     # returns the number of each day in a project
     def project_full_days(self) -> int:
-        # add the correct amount of full days to dict
-        return self.calc_days(self.end_date, self.start_date, -1)
+        # offset for helper function
+        remove_last_day: int = -1
+
+        days: int = self.calc_days(self.end_date, self.start_date, remove_last_day)
+
+        # cannot be below zero, so only return if above zero
+        if days > 0: 
+            return days
+        else:
+            return 0 

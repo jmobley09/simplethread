@@ -1,6 +1,10 @@
 class Reimbursement():
     def __init__(self, projects: dict) -> None:
         self.projects: dict = projects
+        self.full_days_high: int = 0
+        self.full_days_low: int = 0
+        self.travel_days_high: int = 0
+        self.travel_days_low: int = 0
 
     # helper function for checking for duplicates
     def checkIfDuplicates(self, listOfElems) -> bool:
@@ -24,34 +28,65 @@ class Reimbursement():
         else:
             return False
 
-    def calc_gap_days(self) -> int:
-        gap_days: int = 0
+    def calc_full_days(self) -> None:
+        # use method for each project to get days and add to total
+        for project in self.projects:
+            if self.projects[project].city_type == "High":
+                self.full_days_high += self.projects[project].project_full_days()
+            if self.projects[project].city_type == "Low":
+                self.full_days_low += self.projects[project].project_full_days()
+
+    # if there are multiple projects calculates gaps and adds to appropiate total
+    def calc_gap(self) -> None:
+        # calc days offset
         more_than_next_day: int = 1
 
         # getting only the project objects into a list 
         project_list: list = []
         for project in self.projects:
             project_list.append(self.projects[project])
-        
+
         # use calc days function to check between start and end dates for gap
         # uses zero offset since extra day doesnt need to be included
         for i in range(len(project_list)-1):
             current_gap: int = project_list[i].calc_days(project_list[i+1].start_date, project_list[i].end_date, 0)
             if current_gap > more_than_next_day:
-                gap_days += current_gap
-        return gap_days
+                if project_list[i].city_type == "High":
+                   self.travel_days_high += 1
+                elif project_list[i].city_type == "Low":
+                    self.travel_days_low += 1
+            else:
+                if project_list[i].city_type == "High":
+                   self.full_days_high += 1
+                elif project_list[i].city_type == "Low":
+                    self.full_days_low += 1
 
-    def calc_full_days(self) -> int:
-        # value to return
-        total: int = 0
+    # adds in the first and last day to the appropiate total   
+    def calc_travel_days(self) -> None:
+        # defining to avoid magic numbers
+        first_project: int = 0
+        last_project: int = -1
 
-        # use method for each project to get days and add to total
+        # getting only the project objects into a list 
+        project_list: list = []
         for project in self.projects:
-            total += self.projects[project].project_full_days()
+            project_list.append(self.projects[project])
 
-        return total
+        # determine first type so that first project in set can be travel day
+        if project_list[first_project].city_type == "High":
+                   self.travel_days_high += 1
+        elif project_list[first_project].city_type == "Low":
+                    self.travel_days_low += 1
 
+        # determine last type so that last project in set can be travel day
+        if project_list[last_project].city_type == "High":
+                   self.travel_days_high += 1
+        elif project_list[last_project].city_type == "Low":
+                    self.travel_days_low += 1
+        
     # returns the total for entire project set
     def calc_reimbursement(self) -> int:
-        pass
+        self.calc_full_days()
+        self.calc_gap()
+        self.calc_travel_days()
         # return (full_days * self.projects[project].full_rate) + (travel_days * self.projects[project].travel_rate) + (gap_days * self.projects[project].travel_rate)
