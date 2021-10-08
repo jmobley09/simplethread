@@ -30,12 +30,6 @@ class Project():
         return total_days
 
     # returns the number of each day in a project
-    def calc_project_totals(self) -> dict:
-        # default dict to return
-        project_days: dict = {
-            "full_days": 0,
-            "travel_days": 2,
-        }
-
+    def project_full_days(self) -> int:
         # add the correct amount of full days to dict
-        project_days["full_days"] = self.calc_days(self.end_date, self.start_date, -1)
+        return self.calc_days(self.end_date, self.start_date, -1)

@@ -24,13 +24,34 @@ class Reimbursement():
         else:
             return False
 
-    def calc_gap_days(self):
-        gap_day: int = 0
+    def calc_gap_days(self) -> int:
+        gap_days: int = 0
+        more_than_next_day: int = 1
+
+        # getting only the project objects into a list 
+        project_list: list = []
+        for project in self.projects:
+            project_list.append(self.projects[project])
+        
+        # use calc days function to check between start and end dates for gap
+        # uses zero offset since extra day doesnt need to be included
+        for i in range(len(project_list)-1):
+            current_gap: int = project_list[i].calc_days(project_list[i+1].start_date, project_list[i].end_date, 0)
+            if current_gap > more_than_next_day:
+                gap_days += current_gap
+        return gap_days
+
+    def calc_full_days(self) -> int:
+        # value to return
+        total: int = 0
+
+        # use method for each project to get days and add to total
+        for project in self.projects:
+            total += self.projects[project].project_full_days()
+
+        return total
 
     # returns the total for entire project set
     def calc_reimbursement(self) -> int:
         pass
         # return (full_days * self.projects[project].full_rate) + (travel_days * self.projects[project].travel_rate) + (gap_days * self.projects[project].travel_rate)
-
-    # print(new_reimbursement.calc_days(project_set["project_2"].start_date, project_set["project_1"].end_date, -1)) #used for gap
-    # print(new_reimbursement.calc_days(project_set["project_2"].end_date, project_set["project_2"].start_date, -1)) #used for full days

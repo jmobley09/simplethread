@@ -26,7 +26,3 @@ if __name__ == "__main__":
     reimbursement_2 = Reimbursement(project_set_2)
     reimbursement_3 = Reimbursement(project_set_3)
     reimbursement_4 = Reimbursement(project_set_4)
-    # print(reimbursement_1.calc_gap_days())
-    # print(reimbursement_2.calc_gap_days())
-    # print(reimbursement_3.calc_gap_days())
-    print(reimbursement_4.calc_gap_days())
