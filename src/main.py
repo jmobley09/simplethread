@@ -13,6 +13,7 @@ def collect_project_info() -> None :
     project_city_type: str = input("Project City Type (High or Low):")
 
     # put into the set
+    # print(type(project_city_type))
     set_dict[project_name] = Project(project_start, project_end, (project_city_type).capitalize())
     additional_project()
 # checks for additional projects

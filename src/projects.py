@@ -3,7 +3,7 @@ from dateutil import parser
 # class for manipulating projects with dates
 class Project():
     def __init__(self, start: str, end: str, city_type: str) -> None:
-        if city_type == "High" or "Low":
+        if city_type == "High" or city_type == "Low":
             self.city_type = city_type
         else:
             raise ValueError("Invalid City Type")
@@ -19,7 +19,7 @@ class Project():
         to_days: int = 24
 
         # the total between the dates represented in days
-        # adding extra 1 to account for the last day not being included
+        # adding extra offset to account for the last day being included or not (default of subtracting two dates is to drop)
         total_days: int = round(((date_one - date_two).total_seconds()) / to_minutes / to_hours / to_days) + date_offset
 
         return total_days
